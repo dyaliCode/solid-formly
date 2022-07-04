@@ -25,7 +25,7 @@ soon...
 ## Usage for solidjs & solid-start
 
 ```jsx
-import { Component } from "solid-js";
+import { Component, createSignal, Show } from "solid-js";
 import { IValue, IField, Formly } from "solid-formly";
 
 const App: Component = () => {
@@ -108,12 +108,20 @@ const App: Component = () => {
     }
   ];
 
-  const onSubmit = (_values: IValue) => {
-    console.log("_values", _values);
+  const [values, setValues] = createSignal<IValue>();
+
+  const onSubmit = (data: IValue) => {
+    console.log("data", data);
+    setValues(data.values);
   };
 
   return (
     <div class="container">
+      <Show when={values()}>
+        <pre>
+          <code>{JSON.stringify(values(), null, 2)}</code>
+        </pre>
+      </Show>
       <Formly form_name={form_name} fields={fields} onSubmit={onSubmit} />
     </div>
   );
