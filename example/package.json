@@ -15,6 +15,7 @@
     "vite-plugin-solid": "^2.2.6"
   },
   "dependencies": {
+    "solid-formly": "^0.0.1",
     "solid-js": "^1.4.2"
   }
 }

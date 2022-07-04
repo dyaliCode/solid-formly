@@ -1,5 +1,5 @@
+import { Formly, IValue, IField } from "/usr/lib/node_modules/solid-formly";
 import { Component, createSignal, Show } from "solid-js";
-import { IValue, IField, Formly } from "../../src";
 
 const App: Component = () => {
   const form_name = "my_form";
