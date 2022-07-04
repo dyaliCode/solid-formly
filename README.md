@@ -25,7 +25,7 @@ soon...
 
 ```jsx
 import { Component, createSignal, Show } from "solid-js";
-import { Formly, IValue, IField } from "../../src/";
+import { Formly, IValue, IField } from "solid-formly";
 
 const App: Component = () => {
   const form_name = "my_form";
