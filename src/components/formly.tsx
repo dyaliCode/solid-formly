@@ -1,4 +1,4 @@
-import { Component, For, onMount, Show } from "solid-js";
+import { Component, For, JSX, onMount, Show } from "solid-js";
 import { formStore, valueStore } from "../utils/stores";
 import { getForm, preprocessField } from "../utils/form";
 import { produce } from "solid-js/store";
@@ -9,7 +9,7 @@ import Tag, { FieldsTypes } from "./tag";
 import { Dynamic } from "solid-js/web";
 
 const Formly: Component<IForm> = (props: IForm) => {
-  let _form;
+  let _form: any;
   const { forms, setForms }: any = formStore;
   const { values, setValues }: any = valueStore;
 
@@ -117,23 +117,39 @@ const Formly: Component<IForm> = (props: IForm) => {
   const onSubmit = (e: any) => {
     e.preventDefault();
     const _v = values.find((v: IValue) => v.form_name === props.form_name);
+    console.log("_v", _v);
     props.onSubmit(_v);
   };
 
   const onReset = (e: any) => {
-    e.preventDefault();
-    setValues(
-      (value: any) => value.form_name === props.form_name,
-      produce((value: any) => {
-        value.values = {};
-        props.onSubmit(value);
-        return value;
+    // _form.reset();
+
+    setForms(
+      (form: any) => form.form_name === props.form_name,
+      produce((form: any) => {
+        form.fields.map(async (field: any) => {
+          field.value = null;
+
+          // Validation field.
+          field = await validate(field);
+
+          // Set Values.
+          setValues(
+            (value: any) => value.form_name === props.form_name,
+            produce((value: any) => {
+              value.values[`${field.name}`] = field.value;
+              return value;
+            })
+          );
+          return field;
+        });
+        return form;
       })
     );
   };
 
   return (
-    <form onSubmit={onSubmit} ref={_form} onReset={onReset}>
+    <form onSubmit={onSubmit} ref={_form} onReset={(e: any) => onReset(e)}>
       <Show when={getForm(props.form_name)}>
         <For each={getForm(props.form_name).fields}>
           {(field: IField) => (

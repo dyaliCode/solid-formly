@@ -1,4 +1,4 @@
-import { Formly, IValue, IField } from "/usr/lib/node_modules/solid-formly";
+import { Formly, IValue, IField } from "../../src/";
 import { Component, createSignal, Show } from "solid-js";
 
 const App: Component = () => {
@@ -90,12 +90,14 @@ const App: Component = () => {
 
   return (
     <div class="container">
-      <Show when={values()}>
-        <pre>
-          <code>{JSON.stringify(values(), null, 2)}</code>
-        </pre>
-      </Show>
-      <Formly form_name={form_name} fields={fields} onSubmit={onSubmit} />
+      <article>
+        <Show when={values()}>
+          <pre>
+            <code>{JSON.stringify(values(), null, 2)}</code>
+          </pre>
+        </Show>
+        <Formly form_name={form_name} fields={fields} onSubmit={onSubmit} />
+      </article>
     </div>
   );
 };
