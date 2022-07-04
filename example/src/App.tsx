@@ -90,6 +90,11 @@ const App: Component = () => {
 
   return (
     <div class="container">
+      <h1>Multiple dynamic forms</h1>
+      <ul>
+        <li>⚡️ Generate dynamic and reactive forms.</li>
+        <li>😍 Easy to extend with custom field type, custom validation.</li>
+      </ul>
       <article>
         <Show when={values()}>
           <pre>
