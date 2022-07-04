@@ -2,8 +2,7 @@
   <img src="https://assets.solidjs.com/banner?project=Formly&type=package" alt="Solid Formly" />
 </p>
 
-> Solid Formly
-> by [@kamalkech](https://github.com/kamalkech).
+> Solid Formly by [@kamalkech](https://github.com/kamalkech).
 
 # Solid Fromly [![npm Version](https://img.shields.io/npm/v/solid-formly.svg?style=flat-square)](https://www.npmjs.org/package/solid-formly)
 
@@ -26,7 +25,7 @@ soon...
 
 ```jsx
 import { Component, createSignal, Show } from "solid-js";
-import { IValue, IField, Formly } from "solid-formly";
+import { Formly, IValue, IField } from "../../src/";
 
 const App: Component = () => {
   const form_name = "my_form";
@@ -117,12 +116,19 @@ const App: Component = () => {
 
   return (
     <div class="container">
-      <Show when={values()}>
-        <pre>
-          <code>{JSON.stringify(values(), null, 2)}</code>
-        </pre>
-      </Show>
-      <Formly form_name={form_name} fields={fields} onSubmit={onSubmit} />
+      <h1>Multiple dynamic forms</h1>
+      <ul>
+        <li>⚡️ Generate dynamic and reactive forms.</li>
+        <li>😍 Easy to extend with custom field type, custom validation.</li>
+      </ul>
+      <article>
+        <Show when={values()}>
+          <pre>
+            <code>{JSON.stringify(values(), null, 2)}</code>
+          </pre>
+        </Show>
+        <Formly form_name={form_name} fields={fields} onSubmit={onSubmit} />
+      </article>
     </div>
   );
 };
