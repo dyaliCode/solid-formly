@@ -1,14 +1,14 @@
-import { Component, lazy, Show } from "solid-js";
+import { Component, Show } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { addClasses } from "../utils/form";
 import { IPropsTag } from "../utils/types";
 
-const InputComponent = lazy(() => import("./input"));
-const SelectComponent = lazy(() => import("./select"));
-const CheckboxComponent = lazy(() => import("./checkbox"));
-const TextareaComponent = lazy(() => import("./textarea"));
-const RadioComponent = lazy(() => import("./radio"));
-const FileComponent = lazy(() => import("./file"));
+import InputComponent from "./input";
+import SelectComponent from "./select";
+import CheckboxComponent from "./checkbox";
+import TextareaComponent from "./textarea";
+import RadioComponent from "./radio";
+import FileComponent from "./file";
 
 export const FieldsTypes: any = {
   input: InputComponent,

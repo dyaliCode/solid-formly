@@ -1,66 +1,95 @@
-import { Component, For, JSX, onMount, Show } from "solid-js";
+import { Component, createEffect, createResource, For, Show, untrack } from "solid-js";
 import { formStore, valueStore } from "../utils/stores";
 import { getForm, preprocessField } from "../utils/form";
 import { produce } from "solid-js/store";
 import { validate } from "../utils/validation";
 import Message from "./message";
-import { IField, IForm, IValue } from "../utils/types";
+import { IField, IForm } from "../utils/types";
 import Tag, { FieldsTypes } from "./tag";
-import { Dynamic } from "solid-js/web";
+import { Dynamic, isServer } from "solid-js/web";
 
 const Formly: Component<IForm> = (props: IForm) => {
-  let _form: any;
-  const { forms, setForms }: any = formStore;
-  const { values, setValues }: any = valueStore;
+  let _form;
+  const { forms, setForms } = formStore;
+  const { values, setValues } = valueStore;
 
-  // Init
-  onMount(async () => {
-    let _values: any = {};
-
-    await Promise.all(
-      props.fields.map(async (field: any) => {
-        // Set Values.
-        _values[`${field.name}`] = field.value;
-        // Preprocess field.
-        if (field.preprocess) {
-          field = await preprocessField(field, props.fields, _values);
+  const [data, { mutate, refetch }] = createResource(
+    () => {
+      return { fields: props.fields, form_name: props.form_name, onSubmit: props.onSubmit };
+    },
+    async _props => {
+      let _values: any = {};
+      const __fields = await Promise.all(
+        _props.fields.map(async field => {
+          // Set Values.
           _values[`${field.name}`] = field.value;
-        }
-        // Validation field.
-        field = await validate(field);
-        // Return Field.
-        return field;
-      })
-    );
-
-    const _currentForm: IForm = {
-      fields: props.fields,
-      form_name: props.form_name,
-      onSubmit: props.onSubmit
-    };
-
-    const form_exist: IForm = forms.find((form: IForm) => form.form_name === props.form_name);
-    if (!form_exist) {
-      setForms([...forms, _currentForm]);
-      setValues([...values, { form_name: _currentForm.form_name, values: _values }]);
-    } else {
-      setForms(
-        (form: IForm) => form.form_name === props.form_name,
-        produce((form: IForm) => {
-          form.fields = _currentForm.fields;
-          form.form_name = _currentForm.form_name;
-          form.onSubmit = _currentForm.onSubmit;
-          return form;
+          // Preprocess field.
+          if (field.preprocess) {
+            field = await preprocessField(field, _props.fields, _values);
+            _values[`${field.name}`] = field.value;
+          }
+          // Validation field.
+          field = await validate(field);
+          // Return Field.
+          return field;
         })
       );
-      setValues(
-        (value: IValue) => value.form_name === props.form_name,
-        produce((value: IValue) => {
-          value.values = _values;
-          value.form_name = _currentForm.form_name;
-          return value;
-        })
-      );
+
+      const _currentForm = {
+        fields: __fields,
+        form_name: _props.form_name,
+        onSubmit: _props.onSubmit,
+        _values
+      };
+
+      console.log("__fields:", __fields);
+
+      return _currentForm.form_name;
+    },
+    {
+      onHydrated: d => {
+        console.log("d", d);
+      }
+    }
+  );
+
+  createEffect(() => {
+    const _currentForm: any = data();
+    console.log("data()", data());
+
+    if (_currentForm) {
+      // const form_exist = forms.find((form) => form.form_name === props.form_name);
+      const form_exist = untrack(() => {
+        return forms.find(form => form.form_name === props.form_name);
+      });
+
+      if (!form_exist) {
+        setForms((forms: IForm[]) => [...forms, _currentForm]);
+        console.log("_currentForm:::", _currentForm);
+        setValues(values => [
+          ...values,
+          { form_name: _currentForm.form_name, values: _currentForm._values }
+        ]);
+      } else {
+        console.log("222", 222);
+        setForms(
+          form => form.form_name === props.form_name,
+          produce(form => {
+            form.fields = _currentForm.fields;
+            form.form_name = _currentForm.form_name;
+            form.onSubmit = _currentForm.onSubmit;
+            return form;
+          })
+        );
+        setValues(
+          value => value.form_name === props.form_name,
+          produce(value => {
+            value.values = _currentForm._values;
+            value.form_name = _currentForm.form_name;
+            return value;
+          })
+        );
+      }
     }
   });
 
@@ -69,9 +98,9 @@ const Formly: Component<IForm> = (props: IForm) => {
     let _values: any = {};
     // Set forms.
     setForms(
-      (form: any) => form.form_name === props.form_name,
-      produce((form: any) => {
-        form.fields.map(async (field: any) => {
+      form => form.form_name === props.form_name,
+      produce(form => {
+        form.fields.map(async field => {
           if (field.name === data.field_name) {
             _values["touched"] = field.name;
             field.value = data.value;
@@ -79,6 +108,9 @@ const Formly: Component<IForm> = (props: IForm) => {
           _values[`${field.name}`] = field.value;
           // Preprocess field.
           if (field.preprocess) {
+            console.log("_props.fields", props.fields);
+            console.log("field", field);
+            console.log("_values", _values);
             field = await preprocessField(field, form.fields, _values);
             _values[`${field.name}`] = field.value;
           }
@@ -86,8 +118,8 @@ const Formly: Component<IForm> = (props: IForm) => {
           field = await validate(field);
           // Set Values.
           setValues(
-            (value: any) => value.form_name === props.form_name,
-            produce((value: any) => {
+            value => value.form_name === props.form_name,
+            produce(value => {
               value.values[`${field.name}`] = field.value;
               return value;
             })
@@ -103,24 +135,22 @@ const Formly: Component<IForm> = (props: IForm) => {
   // On submit
   const onSubmit = (e: any) => {
     e.preventDefault();
-    const _v = values.find((v: IValue) => v.form_name === props.form_name);
+    const _v = values.find(v => v.form_name === props.form_name);
     props.onSubmit(_v);
   };
 
   const onReset = (e: any) => {
     setForms(
-      (form: any) => form.form_name === props.form_name,
-      produce((form: any) => {
-        form.fields.map(async (field: any) => {
+      form => form.form_name === props.form_name,
+      produce(form => {
+        form.fields.map(async field => {
           field.value = null;
-
           // Validation field.
           field = await validate(field);
-
           // Set Values.
           setValues(
-            (value: any) => value.form_name === props.form_name,
-            produce((value: any) => {
+            value => value.form_name === props.form_name,
+            produce(value => {
               value.values[`${field.name}`] = field.value;
               return value;
             })
@@ -132,10 +162,24 @@ const Formly: Component<IForm> = (props: IForm) => {
     );
   };
 
+  const _getForm = (): any => {
+    if (isServer) {
+      return data();
+    } else {
+      const _form = getForm(props.form_name);
+      console.log("forms", forms);
+      return _form;
+    }
+  };
+
   return (
-    <form onSubmit={onSubmit} ref={_form} onReset={(e: any) => onReset(e)}>
-      <Show when={getForm(props.form_name)}>
-        <For each={getForm(props.form_name).fields}>
+    <form onSubmit={onSubmit} ref={_form} onReset={e => onReset(e)}>
+      <pre>
+        <code>{JSON.stringify(_getForm(), null, 2)}</code>
+      </pre>
+
+      <Show when={_getForm()}>
+        <For each={_getForm()?.fields}>
           {(field: IField) => (
             // Tag
             <Tag
@@ -161,7 +205,7 @@ const Formly: Component<IForm> = (props: IForm) => {
               {/* Messafe error */}
               <Show when={field.validation && field.validation.errors.length}>
                 <For each={field.validation.errors}>
-                  {(error: any) => (
+                  {error => (
                     <Message error={error} messages={field.messages ? field.messages : []} />
                   )}
                 </For>

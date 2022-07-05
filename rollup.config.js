@@ -21,5 +21,5 @@ export default {
       exclude: "node_modules/**",
     })
   ],
-  inlineDynamicImports: true
+  // inlineDynamicImports: true
 };

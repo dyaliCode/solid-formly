@@ -10,8 +10,8 @@ const App: Component = () => {
       attributes: {
         type: "file", // required
         id: "id-field", // optional
-        classes: ["form-control"], // optional
-        label: "Image" // optional
+        classes: ["form-control", "class-error"], // optional
+        label: "Image updated" // optional
       },
       extra: {
         multiple: false, // optional
