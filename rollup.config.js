@@ -18,7 +18,8 @@ export default {
       extensions: [".js", ".ts", ".tsx"],
       babelHelpers: "bundled",
       presets: ["solid", "@babel/preset-typescript"],
-      exclude: "node_modules/**"
+      exclude: "node_modules/**",
     })
-  ]
+  ],
+  inlineDynamicImports: true
 };
