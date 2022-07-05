@@ -1,47 +1,52 @@
-import { Component, createSignal, For, JSX, onMount } from "solid-js";
+import { Component, createSignal, For, JSX, onMount, Show } from "solid-js";
+import { produce } from "solid-js/store";
+import { valueStore } from "../utils";
 import { addClasses, dispatchValues } from "../utils/form";
-import { IPropsField } from "../utils/types";
+import { IPropsField, IValue } from "../utils/types";
 
-const Checkbox: Component<IPropsField> = ({
-  form_name,
-  field,
-  changeValue,
-}: IPropsField) => {
-  const [_values, _setValues] = createSignal<any>([]);
+const Checkbox: Component<IPropsField> = ({ form_name, field, changeValue }: IPropsField) => {
+  // const [_values, _setValues] = createSignal<any>([]);
+  const { values, setValues } = valueStore;
 
   const onInput: JSX.EventHandler<HTMLInputElement, InputEvent> = async (
     event: any
   ): Promise<void> => {
-    if (field.extra.items.length > 0) {
-      field.extra.items.map((item: any) => {
-        if (event.target.name === item.name) {
-          if (event.target.checked) {
-            _setValues([..._values(), item.value]);
-          } else {
-            _setValues((vals: any) => {
-              return vals.filter((val: any) => val !== item.value);
-            });
-          }
-        }
-      });
+    let _values: any[] = [];
+    const item_val = event.target.value;
 
-      dispatchValues(form_name, field.name, _values(), changeValue);
-    }
+    setValues(
+      (value: any) => value.form_name === form_name,
+      produce((value: any) => {
+        let val_field = value.values[field.name] ?? [];
+        if (event.target.checked) {
+          val_field = [...val_field, item_val];
+        } else {
+          val_field = val_field.filter((val: any) => {
+            if (val !== item_val) {
+              return val;
+            }
+          });
+        }
+
+        _values = val_field;
+        return value;
+      })
+    );
+
+    dispatchValues(form_name, field.name, _values, changeValue);
   };
 
   onMount(() => {
     if (field.extra.items.length > 0) {
-      let vls: any = [];
+      let _values: any = [];
       field.extra.items.map((item: any) => {
         if (item.checked) {
-          vls = [...vls, item.value];
+          _values = [..._values, item.value];
         }
         return item;
       });
 
-      _setValues(vls);
-
-      dispatchValues(form_name, field.name, vls, changeValue);
+      dispatchValues(form_name, field.name, _values, changeValue);
     }
   });
 
@@ -52,9 +57,7 @@ const Checkbox: Component<IPropsField> = ({
           <input
             type={field.type}
             id={field.attributes.id ? field.attributes.id : field.name}
-            classList={addClasses(
-              field.attributes.classes ? field.attributes.classes : []
-            )}
+            classList={addClasses(field.attributes.classes ? field.attributes.classes : [])}
             value={item.value}
             name={item.name}
             checked={item.value ? item.checked : false}

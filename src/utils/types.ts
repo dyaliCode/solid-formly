@@ -40,6 +40,8 @@ export interface Attributes {
   max?: number;
   step?: number;
   autocomplete?: string;
+  rows?: number;
+  cols?: number;
 }
 
 export interface Description {

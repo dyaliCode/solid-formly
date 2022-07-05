@@ -5,78 +5,19 @@ const App: Component = () => {
   const form_name = "my_form";
   const fields: IField[] = [
     {
-      type: "input",
-      name: "firstname",
-      value: "",
+      type: "textarea", // required
+      name: "name-field-textarea", // required
+      value: "", // optional
       attributes: {
-        type: "text",
-        label: "Username",
-        id: "firstname",
-        classes: ["form-control"],
-        placeholder: "Tap your first name"
-      },
-      rules: ["required", "min:6"],
-      messages: {
-        required: "Firstname field is required!",
-        min: "First name field must have more that 6 caracters!"
-      }
-    },
-    {
-      prefix: {
-        tag: "div",
-        classes: ["custom-form-group"]
-      },
-      type: "input",
-      name: "lastname",
-      value: "",
-      attributes: {
-        type: "text",
-        id: "lastname",
-        placeholder: "Tap your lastname",
-        classes: ["form-control"]
-      },
-      description: {
-        tag: "span",
-        classes: ["custom-class-desc"],
-        text: "Custom text for description"
-      }
-    },
-    {
-      type: "input",
-      name: "email",
-      value: "",
-      attributes: {
-        type: "email",
-        id: "email",
-        placeholder: "Tap your email"
-      },
-      rules: ["required", "email"]
-    },
-    {
-      type: "select",
-      name: "city",
-      value: 1,
-      attributes: {
-        type: "select",
-        id: "city",
-        label: "City"
-      },
-      rules: ["required"],
-      extra: {
-        options: [
-          {
-            value: null,
-            title: "All"
-          },
-          {
-            value: 1,
-            title: "Agadir"
-          },
-          {
-            value: 2,
-            title: "Casablanca"
-          }
-        ]
+        type: "textarea", // required
+        id: "id-field-textarea", // required
+        classes: ["form-control"], // optional
+        label: "Label field textarea", // optional
+        placeholder: "Placeholder field textarea", // optional
+        disabled: false, // optional
+        readonly: false, // optional
+        rows: 7, // optional
+        cols: 4 // optional
       }
     }
   ];
@@ -88,6 +29,11 @@ const App: Component = () => {
     setValues(data.values);
   };
 
+  const onSubmit2 = (data: IValue) => {
+    console.log("data2", data);
+    setValues(data.values);
+  };
+
   return (
     <div class="container">
       <h1>Multiple dynamic forms</h1>
@@ -95,14 +41,13 @@ const App: Component = () => {
         <li>⚡️ Generate dynamic and reactive forms.</li>
         <li>😍 Easy to extend with custom field type, custom validation.</li>
       </ul>
-      <article>
-        <Show when={values()}>
-          <pre>
-            <code>{JSON.stringify(values(), null, 2)}</code>
-          </pre>
-        </Show>
-        <Formly form_name={form_name} fields={fields} onSubmit={onSubmit} />
-      </article>
+      <div class="grid">
+        <div class="col">
+          <article>
+            <Formly form_name={form_name} fields={fields} onSubmit={onSubmit} />
+          </article>
+        </div>
+      </div>
     </div>
   );
 };
