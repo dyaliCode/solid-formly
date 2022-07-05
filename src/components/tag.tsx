@@ -3,18 +3,20 @@ import { Dynamic } from "solid-js/web";
 import { addClasses } from "../utils/form";
 import { IPropsTag } from "../utils/types";
 
-import Input from "./input";
-import Select from "./select";
-import Checkbox from "./checkbox";
-import Textarea from "./textarea";
-import Radio from "./radio";
+import InputComponent from "./input";
+import SelectComponent from "./select";
+import CheckboxComponent from "./checkbox";
+import TextareaComponent from "./textarea";
+import RadioComponent from "./radio";
+import FileComponent from "./file";
 
 export const FieldsTypes: any = {
-  input: Input,
-  select: Select,
-  checkbox: Checkbox,
-  textarea: Textarea,
-  radio: Radio
+  input: InputComponent,
+  select: SelectComponent,
+  checkbox: CheckboxComponent,
+  textarea: TextareaComponent,
+  radio: RadioComponent,
+  file: FileComponent
 };
 
 const Tag: Component<IPropsTag> = ({ tag, classes, children }: IPropsTag) => {

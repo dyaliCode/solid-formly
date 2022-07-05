@@ -5,57 +5,23 @@ const App: Component = () => {
   const form_name = "my_form";
   const fields: IField[] = [
     {
-      type: "radio", // required
-      name: "name-field-radio", // required
+      type: "file", // required
+      name: "name-file", // require
       attributes: {
-        type: "radio", // required
-        id: "id-field-radio", // required
-        classes: ["form-check-input"], // optional
-        disabled: false, // optional,
-        label: "Radio Inline"
+        type: "file", // required
+        id: "id-field", // optional
+        classes: ["form-control"], // optional
+        label: "Image" // optional
       },
       extra: {
-        items: [
-          {
-            id: "radio1",
-            value: 1,
-            title: "radio 1"
-          },
-          {
-            id: "radio2",
-            value: 2,
-            title: "radio 2",
-            checked: true
-          }
-        ],
-        aligne: "inline"
-      }
-    },
-    {
-      type: "radio", // required
-      name: "name-field-radio2", // required
-      attributes: {
-        type: "radio", // required
-        id: "id-field-radio2", // required
-        classes: ["form-check-input"], // optional
-        disabled: false, // optional,
-        label: "Radio Default"
+        multiple: false, // optional
+        showPreview: true // optional
       },
-      extra: {
-        items: [
-          {
-            id: "radio3",
-            value: 3,
-            title: "radio 3"
-          },
-          {
-            // checked: true,
-            id: "radio4",
-            value: 4,
-            title: "radio 4"
-          }
-        ],
-        aligne: "default"
+      rules: ["file"],
+      file: {
+        // need to add this attribute object if you need a file rule
+        types: "jpg,gif,png",
+        maxsize: 5
       }
     }
   ];

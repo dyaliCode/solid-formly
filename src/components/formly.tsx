@@ -134,9 +134,6 @@ const Formly: Component<IForm> = (props: IForm) => {
 
   return (
     <form onSubmit={onSubmit} ref={_form} onReset={(e: any) => onReset(e)}>
-      <pre>
-        <code>{JSON.stringify(values, null, 2)}</code>
-      </pre>
       <Show when={getForm(props.form_name)}>
         <For each={getForm(props.form_name).fields}>
           {(field: IField) => (
