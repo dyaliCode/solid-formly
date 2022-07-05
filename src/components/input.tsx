@@ -3,11 +3,7 @@ import { addClasses } from "../utils/form";
 import { isRequired } from "../utils/helper";
 import { IPropsField } from "../utils/types";
 
-const Input: Component<IPropsField> = ({
-  form_name,
-  field,
-  changeValue,
-}: IPropsField) => {
+const Input: Component<IPropsField> = ({ form_name, field, changeValue }: IPropsField) => {
   const onInput: JSX.EventHandler<HTMLInputElement, InputEvent> = async (
     event: any
   ): Promise<void> => {
@@ -18,7 +14,7 @@ const Input: Component<IPropsField> = ({
     const data = {
       form_name,
       field_name: field.name,
-      value,
+      value
     };
     changeValue(data);
   };
@@ -29,9 +25,7 @@ const Input: Component<IPropsField> = ({
       name={field.name}
       value={field.value ?? null}
       id={field.attributes.id ? field.attributes.id : field.name}
-      classList={addClasses(
-        field.attributes.classes ? field.attributes.classes : []
-      )}
+      classList={addClasses(field.attributes.classes ? field.attributes.classes : [])}
       placeholder={field.attributes.placeholder}
       required={isRequired(field)}
       disabled={field.attributes.disabled}

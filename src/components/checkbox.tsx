@@ -51,22 +51,24 @@ const Checkbox: Component<IPropsField> = ({ form_name, field, changeValue }: IPr
   });
 
   return (
-    <For each={field.extra.items}>
-      {(item: any) => (
-        <>
-          <input
-            type={field.type}
-            id={field.attributes.id ? field.attributes.id : field.name}
-            classList={addClasses(field.attributes.classes ? field.attributes.classes : [])}
-            value={item.value}
-            name={item.name}
-            checked={item.value ? item.checked : false}
-            onInput={onInput}
-          />
-          <span>{item.title}</span>
-        </>
-      )}
-    </For>
+    <div class={field.extra.aligne === "inline" ? "form-check-inline" : "form-check"}>
+      <For each={field.extra.items}>
+        {(item: any) => (
+          <>
+            <input
+              type={field.type}
+              id={field.attributes.id ? field.attributes.id : field.name}
+              classList={addClasses(field.attributes.classes ? field.attributes.classes : [])}
+              value={item.value}
+              name={item.name}
+              checked={item.value ? item.checked : false}
+              onInput={onInput}
+            />
+            <span>{item.title}</span>
+          </>
+        )}
+      </For>
+    </div>
   );
 };
 

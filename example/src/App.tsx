@@ -5,19 +5,57 @@ const App: Component = () => {
   const form_name = "my_form";
   const fields: IField[] = [
     {
-      type: "textarea", // required
-      name: "name-field-textarea", // required
-      value: "", // optional
+      type: "radio", // required
+      name: "name-field-radio", // required
       attributes: {
-        type: "textarea", // required
-        id: "id-field-textarea", // required
-        classes: ["form-control"], // optional
-        label: "Label field textarea", // optional
-        placeholder: "Placeholder field textarea", // optional
-        disabled: false, // optional
-        readonly: false, // optional
-        rows: 7, // optional
-        cols: 4 // optional
+        type: "radio", // required
+        id: "id-field-radio", // required
+        classes: ["form-check-input"], // optional
+        disabled: false, // optional,
+        label: "Radio Inline"
+      },
+      extra: {
+        items: [
+          {
+            id: "radio1",
+            value: 1,
+            title: "radio 1"
+          },
+          {
+            id: "radio2",
+            value: 2,
+            title: "radio 2",
+            checked: true
+          }
+        ],
+        aligne: "inline"
+      }
+    },
+    {
+      type: "radio", // required
+      name: "name-field-radio2", // required
+      attributes: {
+        type: "radio", // required
+        id: "id-field-radio2", // required
+        classes: ["form-check-input"], // optional
+        disabled: false, // optional,
+        label: "Radio Default"
+      },
+      extra: {
+        items: [
+          {
+            id: "radio3",
+            value: 3,
+            title: "radio 3"
+          },
+          {
+            // checked: true,
+            id: "radio4",
+            value: 4,
+            title: "radio 4"
+          }
+        ],
+        aligne: "default"
       }
     }
   ];
