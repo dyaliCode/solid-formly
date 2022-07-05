@@ -1,6 +1,5 @@
 import { Component, createSignal, For, JSX, Show } from "solid-js";
-import { addClasses } from "../utils/form";
-import { isRequired } from "../utils/helper";
+import { addClasses, dispatchValues } from "../utils/form";
 import { IPropsField } from "../utils/types";
 
 const Input: Component<IPropsField> = ({ form_name, field, changeValue }: IPropsField) => {
@@ -12,14 +11,8 @@ const Input: Component<IPropsField> = ({ form_name, field, changeValue }: IProps
     event: any
   ): Promise<void> => {
     setFiles(Array.from(event.target.files));
-    console.log("111", 111);
     if (files().length > 0) {
-      const data = {
-        form_name,
-        field_name: field.name,
-        value: files()
-      };
-      changeValue(data);
+      dispatchValues(form_name, field.name, files(), changeValue);
     }
   };
 
@@ -34,15 +27,9 @@ const Input: Component<IPropsField> = ({ form_name, field, changeValue }: IProps
       newValue = _files;
     }
 
-    console.log("inputFile", inputFile);
     setFiles(newValue);
 
-    const data = {
-      form_name,
-      field_name: field.name,
-      value: newValue
-    };
-    changeValue(data);
+    dispatchValues(form_name, field.name, newValue, changeValue);
   };
 
   return (

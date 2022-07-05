@@ -139,7 +139,7 @@ const Formly: Component<IForm> = (props: IForm) => {
           {(field: IField) => (
             // Tag
             <Tag
-              tag={field.prefix ? field.prefix.tag : "div"}
+              tag={field.prefix ? field.prefix.tag : ""}
               classes={field.prefix ? (field.prefix.classes ? field.prefix.classes : []) : []}
             >
               {/* Label */}

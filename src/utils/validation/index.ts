@@ -19,8 +19,8 @@ export function validate(_field: IField): IField {
       // For file type.
       if (validator === "file") {
         if (value) {
-          Object.keys(value).map((i) => {
-            Object.keys(_field.file).map((r) => {
+          Object.keys(value).map(i => {
+            Object.keys(_field.file).map(r => {
               valid = _coreRules[r].call(null, value[i], _field.file[r]);
               if (!valid) {
                 errors = [...errors, r];

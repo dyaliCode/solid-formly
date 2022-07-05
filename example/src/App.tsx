@@ -18,9 +18,12 @@ const App: Component = () => {
         showPreview: true // optional
       },
       rules: ["file"],
+      messages: {
+        types: "image type not valid"
+      },
       file: {
         // need to add this attribute object if you need a file rule
-        types: "jpg,gif,png",
+        types: "jpg,gif",
         maxsize: 5
       }
     }
