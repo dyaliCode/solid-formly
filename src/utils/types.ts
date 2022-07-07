@@ -1,11 +1,16 @@
 import { JSX } from "solid-js";
 
-export interface IForm {
+export interface IFormProps {
   form_name: string;
   fields: IField[];
   onSubmit: Function;
   inputSubmit?: ISubmit;
-  values?: any;
+  real?: boolean;
+}
+
+export interface IForm extends IFormProps {
+  values: any;
+  valid: boolean;
 }
 
 export interface IField {

@@ -24,9 +24,14 @@ export function getForm(form_name: string, formsServer: any): IForm {
   }
 }
 
-export function getValue(form_name: string): IValue {
-  const _value: IValue = values.find((value: IValue) => value.form_name === form_name);
-  return _value;
+export function getValues(form_name: string): any {
+  const _form: IForm = forms.find((form: IForm) => form.form_name === form_name);
+  return _form?.values;
+}
+
+export function isValid(form_name: string): any {
+  const _form: IForm = forms.find((form: IForm) => form.form_name === form_name);
+  return _form?.valid ? true : false;
 }
 
 export function addClasses(classes: string[]):
