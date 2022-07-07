@@ -5,6 +5,7 @@ export interface IForm {
   fields: IField[];
   onSubmit: Function;
   inputSubmit?: ISubmit;
+  values?: any;
 }
 
 export interface IField {

@@ -1,30 +1,48 @@
+import { IForm } from "solid-formly";
 import { Component, createSignal, Show } from "solid-js";
-import { Formly, IValue, IField } from "../../dist/";
+import { Formly, IValue, IField } from "../../src/";
 
 const App: Component = () => {
   const form_name = "my_form";
   const fields: IField[] = [
     {
-      type: "file", // required
-      name: "name-file", // require
+      type: "input",
+      name: "x",
+      value: 2,
       attributes: {
-        type: "file", // required
-        id: "id-field", // optional
-        classes: ["form-control", "class-error"], // optional
-        label: "Image updated" // optional
+        id: "x",
+        type: "number",
+        classes: ["form-control"],
+        label: "X"
       },
-      extra: {
-        multiple: false, // optional
-        showPreview: true // optional
+      rules: ["required"]
+    },
+    {
+      type: "input",
+      name: "y",
+      value: 8,
+      attributes: {
+        id: "y",
+        type: "number",
+        classes: ["form-control"],
+        label: "Y"
+      }
+    },
+    {
+      type: "input",
+      name: "total",
+      attributes: {
+        id: "total",
+        type: "number",
+        classes: ["form-control"],
+        label: "X + Y"
       },
-      rules: ["file"],
-      messages: {
-        types: "image type not valid"
-      },
-      file: {
-        // need to add this attribute object if you need a file rule
-        types: "jpg,gif",
-        maxsize: 5
+      preprocess: (field: IField, fields: IForm, values: any) => {
+        field.value = values.x + values.y;
+        // if (values.touched === "x" || values.touched === "y") {
+        //   field.value = values.x + values.y;
+        // }
+        return field;
       }
     }
   ];
