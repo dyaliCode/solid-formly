@@ -65,6 +65,7 @@ const Formly: Component<IForm> = (props: IForm) => {
   );
   // End createResource.
 
+  // Start createEffect.
   createEffect(() => {
     let _currentForm: IForm = _data() ? JSON.parse(_data() ?? "") : null;
 
@@ -80,6 +81,7 @@ const Formly: Component<IForm> = (props: IForm) => {
         }
         return field;
       });
+
       const form_exist = forms.find(form => form.form_name === props.form_name);
       // const form_exist = untrack(() => {
       //   return forms.find(form => form.form_name === props.form_name);
@@ -100,11 +102,10 @@ const Formly: Component<IForm> = (props: IForm) => {
       }
     }
   });
+  // End createEffect.
 
   // On change value
   const onChangeValue = async (data: any) => {
-    const _form = _data() ? JSON.parse(_data() ?? "") : null;
-
     // Set forms.
     setForms(
       form => form.form_name === props.form_name,
@@ -126,7 +127,7 @@ const Formly: Component<IForm> = (props: IForm) => {
           // Return field.
           return field;
         });
-        return _form;
+        return form;
       })
     );
   };
@@ -146,16 +147,9 @@ const Formly: Component<IForm> = (props: IForm) => {
           field.value = null;
           // Validation field.
           field = await validate(field);
-          // Set Values.
-          // setValues(
-          //   value => value.form_name === props.form_name,
-          //   produce(value => {
-          //     value.values[`${field.name}`] = field.value;
-          //     return value;
-          //   })
-          // );
           return field;
         });
+        form.values = {};
         return form;
       })
     );
