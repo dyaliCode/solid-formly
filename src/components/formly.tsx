@@ -1,19 +1,19 @@
-import { Component, createEffect, createResource, For, Show, untrack } from "solid-js";
-import { formStore, valueStore } from "../utils/stores";
+import { Component, createEffect, createResource, For, Show } from "solid-js";
+import { formStore } from "../utils/stores";
 import { getForm, preprocessField } from "../utils/form";
 import { produce } from "solid-js/store";
 import { validate } from "../utils/validation";
 import Message from "./message";
-import { IField, IForm, IValue } from "../utils/types";
+import { IField, IForm } from "../utils/types";
 import Tag, { FieldsTypes } from "./tag";
-import { Dynamic, isServer } from "solid-js/web";
+import { Dynamic } from "solid-js/web";
 
 const Formly: Component<IForm> = (props: IForm) => {
   let _form;
   const { forms, setForms } = formStore;
 
   // Start createResource.
-  const [_data] = createResource(
+  const [formsServer] = createResource(
     () => {
       return { fields: props.fields, form_name: props.form_name, onSubmit: props.onSubmit };
     },
@@ -67,7 +67,7 @@ const Formly: Component<IForm> = (props: IForm) => {
 
   // Start createEffect.
   createEffect(() => {
-    let _currentForm: IForm = _data() ? JSON.parse(_data() ?? "") : null;
+    let _currentForm: IForm = formsServer() ? JSON.parse(formsServer() ?? "") : null;
 
     if (_currentForm) {
       props.fields.map((field: IField) => {
@@ -83,7 +83,7 @@ const Formly: Component<IForm> = (props: IForm) => {
       });
 
       const form_exist = forms.find(form => form.form_name === props.form_name);
-      // const form_exist = untrack(() => {
+      // const form_exist (() => {
       //   return forms.find(form => form.form_name === props.form_name);
       // });
 
@@ -155,23 +155,10 @@ const Formly: Component<IForm> = (props: IForm) => {
     );
   };
 
-  const _getForm = (): any => {
-    if (isServer) {
-      return _data() ? JSON.parse(_data() ?? "") : null;
-    } else {
-      const _form = getForm(props.form_name);
-      return _form;
-    }
-  };
-
   return (
     <form onSubmit={onSubmit} ref={_form} onReset={e => onReset(e)}>
-      <h2>Form: {props.form_name}</h2>
-      <pre>
-        <code>{JSON.stringify(_getForm(), null, 2)}</code>
-      </pre>
-      <Show when={_getForm()}>
-        <For each={_getForm()?.fields}>
+      <Show when={getForm(props.form_name, formsServer())}>
+        <For each={getForm(props.form_name, formsServer())?.fields}>
           {(field: IField) => (
             // Tag
             <Tag
