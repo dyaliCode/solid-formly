@@ -19,7 +19,7 @@ const Input: Component<IPropsField> = ({ form_name, field, changeValue }: IProps
 
   return (
     <input
-      type={field.attributes.type}
+      type={field.attributes.type ? field.attributes.type : "text"}
       name={field.name}
       value={field.value ?? null}
       id={field.attributes.id ? field.attributes.id : field.name}

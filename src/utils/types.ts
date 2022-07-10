@@ -38,7 +38,7 @@ export interface IPropsField {
 
 export interface Attributes {
   id: string;
-  type: string;
+  type?: string;
   label?: string;
   classes?: string[];
   placeholder?: string;

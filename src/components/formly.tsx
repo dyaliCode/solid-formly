@@ -99,6 +99,7 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
       // const form_exist (() => {
       //   return forms.find(form => form.form_name === props.form_name);
       // });
+      // TODO: check field name is unique.
 
       if (!form_exist) {
         setForms((forms: IForm[]) => [...forms, _currentForm]);
