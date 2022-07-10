@@ -1,4 +1,12 @@
-import { Component, createEffect, createResource, For, mergeProps, Show } from "solid-js";
+import {
+  Component,
+  createEffect,
+  createResource,
+  createSignal,
+  For,
+  mergeProps,
+  Show
+} from "solid-js";
 import { formStore } from "../utils/stores";
 import { addClasses, getForm, preprocessField } from "../utils/form";
 import { produce } from "solid-js/store";
@@ -7,6 +15,7 @@ import Message from "./message";
 import { IField, IForm, IFormProps } from "../utils/types";
 import Tag, { FieldsTypes } from "./tag";
 import { Dynamic } from "solid-js/web";
+import { isFieldDuplicated } from "../utils/helper";
 
 const Formly: Component<IFormProps> = (props: IFormProps) => {
   const propsMerged: IFormProps = mergeProps(
@@ -15,6 +24,7 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
   );
   let _form;
   const { forms, setForms } = formStore;
+  const [isDuplicate, setIsDuplicate] = createSignal<boolean>(false);
 
   // Start createResource.
   const [formsServer] = createResource(
@@ -81,6 +91,9 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
   createEffect(() => {
     let _currentForm: IForm = formsServer() ? JSON.parse(formsServer() ?? "") : null;
 
+    // Check duplicated fields.
+    setIsDuplicate(isFieldDuplicated(props.fields));
+
     if (_currentForm) {
       props.fields.map((field: IField) => {
         if (field.preprocess) {
@@ -95,11 +108,6 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
       });
 
       const form_exist = forms.find(form => form.form_name === props.form_name);
-      // TODO: ??
-      // const form_exist (() => {
-      //   return forms.find(form => form.form_name === props.form_name);
-      // });
-      // TODO: check field name is unique.
 
       if (!form_exist) {
         setForms((forms: IForm[]) => [...forms, _currentForm]);
@@ -195,59 +203,65 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
 
   return (
     <>
-      {/* <pre>
-        <code>{JSON.stringify(propsMerged, null, 2)}</code>
-      </pre> */}
-      <form onSubmit={onSubmit} ref={_form} onReset={e => onReset(e)}>
-        <Show when={_getCurrentForm()}>
-          <For each={_getCurrentForm()?.fields}>
-            {(field: IField) => (
-              // Tag
-              <Tag
-                tag={field.prefix ? field.prefix.tag : ""}
-                classes={field.prefix ? (field.prefix.classes ? field.prefix.classes : []) : []}
-              >
-                {/* Label */}
-                <Show when={field.attributes}>
-                  <Show when={field.attributes.label}>
-                    <label for={field.attributes.id} class="label">
-                      {field.attributes.label}
-                    </label>
+      <Show
+        when={!isDuplicate()}
+        fallback={
+          <p>
+            Error! Detect duplicate fields, make sure you put unique name and id for each field{" "}
+          </p>
+        }
+      >
+        <form onSubmit={onSubmit} ref={_form} onReset={e => onReset(e)}>
+          <Show when={_getCurrentForm()}>
+            <For each={_getCurrentForm()?.fields}>
+              {(field: IField) => (
+                // Tag
+                <Tag
+                  tag={field.prefix ? field.prefix.tag : ""}
+                  classes={field.prefix ? (field.prefix.classes ? field.prefix.classes : []) : []}
+                >
+                  {/* Label */}
+                  <Show when={field.attributes}>
+                    <Show when={field.attributes.label}>
+                      <label for={field.attributes.id} class="label">
+                        {field.attributes.label}
+                      </label>
+                    </Show>
                   </Show>
-                </Show>
-                {/* Field */}
-                <Dynamic
-                  component={FieldsTypes[field.type]}
-                  form_name={props.form_name}
-                  field={field}
-                  changeValue={onChangeValue}
-                  name={field.name}
-                />
-                {/* Messafe error */}
-                <Show when={field.validation && field.validation.errors.length}>
-                  <For each={field.validation.errors}>
-                    {error => (
-                      <Message error={error} messages={field.messages ? field.messages : []} />
-                    )}
-                  </For>
-                </Show>
-              </Tag>
-            )}
-          </For>
-        </Show>
-        <button
-          classList={addClasses(props.btnSubmit?.classes ? props.btnSubmit?.classes : [])}
-          type="submit"
-        >
-          {propsMerged.btnSubmit?.text ? propsMerged.btnSubmit?.text : "Submit"}
-        </button>
-        <button
-          classList={addClasses(props.btnReset?.classes ? props.btnReset?.classes : [])}
-          type="reset"
-        >
-          {propsMerged.btnReset?.text ? propsMerged.btnReset?.text : "Reset"}
-        </button>
-      </form>
+                  {/* Field */}
+                  <Dynamic
+                    component={FieldsTypes[field.type]}
+                    form_name={props.form_name}
+                    field={field}
+                    changeValue={onChangeValue}
+                    name={field.name}
+                  />
+                  {/* Messafe error */}
+                  <Show when={field.validation && field.validation.errors.length}>
+                    <For each={field.validation.errors}>
+                      {error => (
+                        <Message error={error} messages={field.messages ? field.messages : []} />
+                      )}
+                    </For>
+                  </Show>
+                </Tag>
+              )}
+            </For>
+          </Show>
+          <button
+            classList={addClasses(props.btnSubmit?.classes ? props.btnSubmit?.classes : [])}
+            type="submit"
+          >
+            {propsMerged.btnSubmit?.text ? propsMerged.btnSubmit?.text : "Submit"}
+          </button>
+          <button
+            classList={addClasses(props.btnReset?.classes ? props.btnReset?.classes : [])}
+            type="reset"
+          >
+            {propsMerged.btnReset?.text ? propsMerged.btnReset?.text : "Reset"}
+          </button>
+        </form>
+      </Show>
     </>
   );
 };
