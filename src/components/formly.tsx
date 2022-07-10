@@ -1,14 +1,19 @@
-import { Component, createEffect, createResource, For, Show } from "solid-js";
+import { Component, createEffect, createResource, For, mergeProps, Show } from "solid-js";
 import { formStore } from "../utils/stores";
-import { getForm, preprocessField } from "../utils/form";
+import { addClasses, getForm, preprocessField } from "../utils/form";
 import { produce } from "solid-js/store";
 import { validate } from "../utils/validation";
 import Message from "./message";
 import { IField, IForm, IFormProps } from "../utils/types";
 import Tag, { FieldsTypes } from "./tag";
 import { Dynamic } from "solid-js/web";
+import { listenerCount } from "process";
 
 const Formly: Component<IFormProps> = (props: IFormProps) => {
+  const propsMerged: IFormProps = mergeProps(
+    { btnSubmit: { text: "textBtnSubmit", classes: [] } },
+    props
+  );
   let _form;
   const { forms, setForms } = formStore;
 
@@ -188,14 +193,20 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
     return getForm(props.form_name, formsServer());
   };
 
-  return (
-    <form onSubmit={onSubmit} ref={_form} onReset={e => onReset(e)}>
-      <Show when={_getCurrentForm()}>
-        <>
-          {/* <pre>
-            <code>{JSON.stringify(_getCurrentForm(), null, 2)}</code>
-          </pre> */}
+  const _classes = () => {
+    let lst: any = [];
+    props.btnSubmit?.classes?.map((cls: string) => (lst[cls] = true));
+    console.log("lst", lst);
+    return lst;
+  };
 
+  return (
+    <>
+      {/* <pre>
+        <code>{JSON.stringify(propsMerged, null, 2)}</code>
+      </pre> */}
+      <form onSubmit={onSubmit} ref={_form} onReset={e => onReset(e)}>
+        <Show when={_getCurrentForm()}>
           <For each={_getCurrentForm()?.fields}>
             {(field: IField) => (
               // Tag
@@ -230,15 +241,18 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
               </Tag>
             )}
           </For>
-        </>
-      </Show>
-      <button class="btn btn-primary" type="submit">
-        Submit
-      </button>
-      <button class="btn btn-primary" type="reset">
-        Reset
-      </button>
-    </form>
+        </Show>
+        <button classList={_classes()} type="submit">
+          {propsMerged.btnSubmit?.text ? propsMerged.btnSubmit?.text : "Submit"}
+        </button>
+        <button
+          // classList={addClasses(props.btnSubmit?.classes ? props.btnSubmit?.classes : [])}
+          type="reset"
+        >
+          {propsMerged.btnReset?.text ? propsMerged.btnReset?.text : "Reset"}
+        </button>
+      </form>
+    </>
   );
 };
 

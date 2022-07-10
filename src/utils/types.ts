@@ -3,6 +3,8 @@ import { JSX } from "solid-js";
 export interface IFormProps {
   form_name: string;
   fields: IField[];
+  btnSubmit?: IBtnSubmit;
+  btnReset?: IBtnReset;
   onSubmit: Function;
   inputSubmit?: ISubmit;
   real?: boolean;
@@ -76,4 +78,14 @@ export interface ISubmit {
   type: string;
   text: string;
   classes: string[];
+}
+
+export interface IBtnSubmit {
+  text?: string;
+  classes?: string[];
+}
+
+export interface IBtnReset {
+  text?: string;
+  classes?: string[];
 }

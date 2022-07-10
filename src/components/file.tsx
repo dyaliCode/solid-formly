@@ -1,6 +1,5 @@
 import { Component, createSignal, For, JSX, Show } from "solid-js";
-import { addClasses, dispatchValues } from "../utils/form";
-import { IPropsField } from "../utils/types";
+import { addClasses, dispatchValues, IPropsField } from "../utils";
 
 const Input: Component<IPropsField> = ({ form_name, field, changeValue }: IPropsField) => {
   let inputFile: any;

@@ -1,7 +1,5 @@
 import { Component, createSignal, For, JSX, onMount } from "solid-js";
-import { addClasses, dispatchValues } from "../utils/form";
-import { isRequired } from "../utils/helper";
-import { IField, IPropsField } from "../utils/types";
+import { addClasses, dispatchValues, IPropsField } from "../utils";
 
 const Radio: Component<IPropsField> = ({ form_name, field, changeValue }: IPropsField) => {
   const [items, setItems] = createSignal<any[]>([]);

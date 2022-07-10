@@ -1,7 +1,5 @@
 import { Component, createSignal, For, JSX, onMount, Show } from "solid-js";
-import { addClasses } from "../utils/form";
-import { isRequired } from "../utils/helper";
-import { IPropsField } from "../utils/types";
+import { addClasses, isRequired, IPropsField } from "../utils";
 
 const Input: Component<IPropsField> = ({ form_name, field, changeValue }: IPropsField) => {
   const [multiple, setMultiple] = createSignal<boolean>(false);

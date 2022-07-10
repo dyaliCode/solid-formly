@@ -42,6 +42,7 @@ export function addClasses(classes: string[]):
   if (!classes.length) return;
   let lst: any = {};
   classes.map((cls: string) => (lst[cls] = true));
+
   return lst;
 }
 

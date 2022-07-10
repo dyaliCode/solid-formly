@@ -1,7 +1,5 @@
 import { Component, JSX } from "solid-js";
-import { addClasses } from "../utils/form";
-import { isRequired } from "../utils/helper";
-import { IPropsField } from "../utils/types";
+import { addClasses, isRequired, IPropsField } from "../utils";
 
 const Textarea: Component<IPropsField> = ({ form_name, field, changeValue }: IPropsField) => {
   const onInput: JSX.EventHandler<HTMLTextAreaElement, InputEvent> = async (

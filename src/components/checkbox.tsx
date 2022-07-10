@@ -1,12 +1,9 @@
-import { Component, createSignal, For, JSX, onMount, Show } from "solid-js";
+import { Component, For, JSX, onMount } from "solid-js";
 import { produce } from "solid-js/store";
-import { valueStore } from "../utils";
-import { addClasses, dispatchValues } from "../utils/form";
-import { IPropsField, IValue } from "../utils/types";
+import { IPropsField, valueStore, dispatchValues, addClasses } from "../utils";
 
 const Checkbox: Component<IPropsField> = ({ form_name, field, changeValue }: IPropsField) => {
-  // const [_values, _setValues] = createSignal<any>([]);
-  const { values, setValues } = valueStore;
+  const { setValues } = valueStore;
 
   const onInput: JSX.EventHandler<HTMLInputElement, InputEvent> = async (
     event: any
