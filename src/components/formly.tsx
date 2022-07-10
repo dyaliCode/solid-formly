@@ -170,7 +170,7 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
   // On submit.
   const onSubmit = (e: any) => {
     e.preventDefault();
-    _dispatchDataForm();
+    dispatchDataForm();
   };
 
   // On Reset.
@@ -191,13 +191,13 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
   };
 
   // Displach data current form.
-  const _dispatchDataForm = () => {
+  const dispatchDataForm = () => {
     const form: IForm | undefined = forms.find((form: IForm) => form.form_name === props.form_name);
     props.onSubmit(form?.values ? { values: form.values, valid: form.valid } : null);
   };
 
   // Get current form.
-  const _getCurrentForm = (): IForm => {
+  const getCurrentForm = (): IForm => {
     return getForm(props.form_name, formsServer());
   };
 
@@ -212,8 +212,8 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
         }
       >
         <form onSubmit={onSubmit} ref={_form} onReset={e => onReset(e)}>
-          <Show when={_getCurrentForm()}>
-            <For each={_getCurrentForm()?.fields}>
+          <Show when={getCurrentForm()}>
+            <For each={getCurrentForm()?.fields}>
               {(field: IField) => (
                 // Tag
                 <Tag
