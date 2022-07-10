@@ -7,7 +7,6 @@ import Message from "./message";
 import { IField, IForm, IFormProps } from "../utils/types";
 import Tag, { FieldsTypes } from "./tag";
 import { Dynamic } from "solid-js/web";
-import { listenerCount } from "process";
 
 const Formly: Component<IFormProps> = (props: IFormProps) => {
   const propsMerged: IFormProps = mergeProps(
@@ -193,13 +192,6 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
     return getForm(props.form_name, formsServer());
   };
 
-  const _classes = () => {
-    let lst: any = [];
-    props.btnSubmit?.classes?.map((cls: string) => (lst[cls] = true));
-    console.log("lst", lst);
-    return lst;
-  };
-
   return (
     <>
       {/* <pre>
@@ -242,11 +234,14 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
             )}
           </For>
         </Show>
-        <button classList={_classes()} type="submit">
+        <button
+          classList={addClasses(props.btnSubmit?.classes ? props.btnSubmit?.classes : [])}
+          type="submit"
+        >
           {propsMerged.btnSubmit?.text ? propsMerged.btnSubmit?.text : "Submit"}
         </button>
         <button
-          // classList={addClasses(props.btnSubmit?.classes ? props.btnSubmit?.classes : [])}
+          classList={addClasses(props.btnReset?.classes ? props.btnReset?.classes : [])}
           type="reset"
         >
           {propsMerged.btnReset?.text ? propsMerged.btnReset?.text : "Reset"}
