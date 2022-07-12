@@ -15,14 +15,16 @@ export interface IForm extends IFormProps {
   valid: boolean;
 }
 
+export type RulesList = "required" | "min" | "max" | "email" | "between" | "file" | "equal" | "url";
+
 export interface IField {
-  type: string;
+  type: "input" | "date" | "textarea" | "select" | "checkbox" | "radio" | "file";
   name: string;
   value?: any;
   attributes: Attributes;
   description?: Description;
   prefix?: IPrefix;
-  rules?: string[];
+  rules?: RulesList[] | string[];
   messages?: any;
   extra?: any;
   preprocess?: Function; // for now
@@ -38,7 +40,7 @@ export interface IPropsField {
 
 export interface Attributes {
   id: string;
-  type?: string;
+  type?: "text" | "password" | "email" | "number";
   label?: string;
   classes?: string[];
   placeholder?: string;
