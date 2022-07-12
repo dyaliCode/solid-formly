@@ -24,112 +24,73 @@ soon...
 ## Usage for solidjs & solid-start
 
 ```jsx
-import { Component, createSignal, Show } from "solid-js";
+import { createSignal, Show } from "solid-js";
 import { Formly, IValue, IField } from "solid-formly";
 
-const App: Component = () => {
-  const form_name = "my_form";
-  const fields: IField[] = [
-    {
-      type: "input",
-      name: "firstname",
-      value: "",
-      attributes: {
-        type: "text",
-        label: "Username",
-        id: "firstname",
-        classes: ["form-control"],
-        placeholder: "Tap your first name"
-      },
-      rules: ["required", "min:6"],
-      messages: {
-        required: "Firstname field is required!",
-        min: "First name field must have more that 6 caracters!"
-      }
+const form_name = "formly_usage";
+const fields: IField[] = [
+  {
+    type: "input",
+    name: "firstname",
+    attributes: {
+      type: "text",
+      id: "firstname",
+      classes: ["form-control"],
+      placeholder: "Tap your first name"
     },
-    {
-      prefix: {
-        tag: "div",
-        classes: ["custom-form-group"]
-      },
-      type: "input",
-      name: "lastname",
-      value: "",
-      attributes: {
-        type: "text",
-        id: "lastname",
-        placeholder: "Tap your lastname",
-        classes: ["form-control"]
-      },
-      description: {
-        tag: "span",
-        classes: ["custom-class-desc"],
-        text: "Custom text for description"
-      }
-    },
-    {
-      type: "input",
-      name: "email",
-      value: "",
-      attributes: {
-        type: "email",
-        id: "email",
-        placeholder: "Tap your email"
-      },
-      rules: ["required", "email"]
-    },
-    {
-      type: "select",
-      name: "city",
-      value: 1,
-      attributes: {
-        type: "select",
-        id: "city",
-        label: "City"
-      },
-      rules: ["required"],
-      extra: {
-        options: [
-          {
-            value: null,
-            title: "All"
-          },
-          {
-            value: 1,
-            title: "Agadir"
-          },
-          {
-            value: 2,
-            title: "Casablanca"
-          }
-        ]
-      }
+    rules: ["required", "min:3", "max:10"],
+    messages: {
+      required: "The firstname is required",
+      min: "Your firstname is too short min=3",
+      max: "Your firstname is too long max=10"
     }
-  ];
+  },
+  {
+    type: "input",
+    name: "password",
+    attributes: {
+      type: "password",
+      id: "password",
+      classes: ["form-control"],
+      placeholder: "Tap your first name"
+    },
+    rules: ["required", "min:6", "max:10"],
+    messages: {
+      required: "The password is required",
+      min: "Your password is too short min=6",
+      max: "Your password is too long max=10"
+    }
+  }
+];
 
-  const [values, setValues] = createSignal<IValue>();
+const App = () => {
+  const [values, setValues] = createSignal < any > null;
 
   const onSubmit = (data: IValue) => {
-    console.log("data", data);
-    setValues(data.values);
+    setValues(data);
   };
 
   return (
-    <div class="container">
-      <h1>Multiple dynamic forms</h1>
-      <ul>
-        <li>⚡️ Generate dynamic and reactive forms.</li>
-        <li>😍 Easy to extend with custom field type, custom validation.</li>
-      </ul>
-      <article>
-        <Show when={values()}>
-          <pre>
-            <code>{JSON.stringify(values(), null, 2)}</code>
-          </pre>
-        </Show>
-        <Formly form_name={form_name} fields={fields} onSubmit={onSubmit} />
-      </article>
-    </div>
+    <>
+      <Show when={values()}>
+        <pre>
+          <code>{JSON.stringify(values(), null, 2)}</code>
+        </pre>
+      </Show>
+      <Formly
+        form_name={props.form_name}
+        fields={props.fields}
+        onSubmit={onSubmit}
+        btnSubmit={{
+          text: "Send"
+        }}
+        btnReset={{
+          text: "Reset",
+          classes: ["outline", "btn-primary"]
+        }}
+        real={true}
+      />
+    </>
   );
 };
 
