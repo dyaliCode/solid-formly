@@ -24,7 +24,7 @@ export type RulesList =
   | "file"
   | "equal"
   | "url"
-  | Function;
+  | (() => Promise<boolean>);
 
 export interface IField {
   type: "input" | "date" | "textarea" | "select" | "checkbox" | "radio" | "file";
@@ -49,7 +49,7 @@ export interface IPropsField {
 
 export interface Attributes {
   id: string;
-  type?: "text" | "password" | "email" | "number";
+  type?: "text" | "password" | "email" | "number" | "tel";
   label?: string;
   classes?: string[];
   placeholder?: string;
