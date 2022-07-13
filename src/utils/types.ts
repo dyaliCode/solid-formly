@@ -49,7 +49,7 @@ export interface IPropsField {
 
 export interface Attributes {
   id: string;
-  type?: "text" | "password" | "email" | "number" | "tel";
+  type?: "text" | "password" | "email" | "number" | "tel" | "range";
   label?: string;
   classes?: string[];
   placeholder?: string;
