@@ -24,7 +24,7 @@ export interface IField {
   attributes: Attributes;
   description?: Description;
   prefix?: IPrefix;
-  rules?: RulesList[] | string[];
+  rules?: any[]; // RulesList[] | string[] | (() => void)[];
   messages?: any;
   extra?: any;
   preprocess?: Function; // for now

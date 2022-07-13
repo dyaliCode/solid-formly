@@ -1,6 +1,6 @@
 import { isServer } from "solid-js/web";
 import { formStore, valueStore } from "./stores";
-import { IField, IForm, IValue } from "./types";
+import { IField, IForm } from "./types";
 
 const { forms }: any = formStore;
 const { values }: any = valueStore;

@@ -23,7 +23,7 @@ soon...
 
 ## Usage for solidjs & solid-start
 
-```jsx
+```js
 import { createSignal, Show } from "solid-js";
 import { Formly, IValue, IField } from "solid-formly";
 

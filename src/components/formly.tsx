@@ -104,6 +104,14 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
             return _field;
           });
         }
+        if (field.rules) {
+          _currentForm.fields.map((_field: IField) => {
+            if (field.name === _field.name) {
+              _field.rules = field.rules;
+            }
+            return _field;
+          });
+        }
         return field;
       });
 
@@ -146,6 +154,7 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
           }
           // Validation field.
           field = await validate(field);
+
           if (field.validation.dirty) {
             form.valid = false;
           }
