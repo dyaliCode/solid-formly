@@ -13,7 +13,7 @@
 
 ## Documentation
 
-soon...
+[Link Documentation](https://solid-formly-documentation.vercel.app/)
 
 ## Installation
 
@@ -64,7 +64,7 @@ const fields: IField[] = [
 ];
 
 const App = () => {
-  const [values, setValues] = createSignal<any>(null);
+  const [values, setValues] = createSignal < any > null;
 
   const onSubmit = (data: IValue) => {
     setValues(data);

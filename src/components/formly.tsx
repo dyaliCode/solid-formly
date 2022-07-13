@@ -19,7 +19,7 @@ import { isFieldDuplicated } from "../utils/helper";
 
 const Formly: Component<IFormProps> = (props: IFormProps) => {
   const propsMerged: IFormProps = mergeProps(
-    { btnSubmit: { text: "textBtnSubmit", classes: [] } },
+    { btnSubmit: { text: "Submit", classes: [] }, btnReset: { text: "Reset", classes: [] } },
     props
   );
   let _form;
