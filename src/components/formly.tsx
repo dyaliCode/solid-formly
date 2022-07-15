@@ -212,9 +212,6 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
 
   return (
     <>
-      <pre>
-        <code>{JSON.stringify(getCurrentForm(), null, 2)}</code>
-      </pre>
       <Show
         when={!isDuplicate()}
         fallback={
