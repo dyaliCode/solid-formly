@@ -12,21 +12,36 @@ const Input: Component<IPropsField> = ({ form_name, field, changeValue }: IProps
   });
 
   const onInput: JSX.EventHandler<HTMLSelectElement, Event> = async (event: any) => {
+    let value;
+    if (multiple()) {
+      let values: any = [];
+      const selectedOptions = event.currentTarget.selectedOptions;
+      for (let i = 0; i < selectedOptions.length; i++) {
+        const value_item = selectedOptions[i].value;
+        values = [...values, ...value_item];
+      }
+      value = values;
+    } else {
+      value = event.target.value;
+    }
+
     const data = {
       form_name,
       field_name: field.name,
-      value: parseInt(event.currentTarget.value)
+      value: value
     };
     changeValue(data);
   };
 
   const checkSelected = (is_multiple: any, option_value: any, field_value: any): boolean => {
-    if (is_multiple()) {
+    if (is_multiple) {
       if (field_value && field_value.length) {
         const res = field_value.indexOf(option_value) != -1;
+        console.log("res1", res);
         return res;
       } else if (field.value && field.value.length) {
         const res = field.value.indexOf(option_value) != -1;
+        console.log("res2", res);
         return res;
       }
       return false;
@@ -42,14 +57,14 @@ const Input: Component<IPropsField> = ({ form_name, field, changeValue }: IProps
       required={isRequired(field)}
       disabled={field.attributes.disabled}
       multiple={multiple()}
-      onChange={onInput}
+      onInput={onInput}
     >
       <Show when={field.extra.options && field.extra.options.length}>
         <For each={field.extra.options}>
           {(option: any) => (
             <option
               value={option.value}
-              selected={checkSelected(multiple, option.value, field.value)}
+              // selected={checkSelected(field.extra.multiple ?? false, option.value, field.value)}
             >
               {option.title}
             </option>

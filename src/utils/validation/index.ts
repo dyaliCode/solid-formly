@@ -32,7 +32,10 @@ export async function validate(_field: IField): Promise<IField> {
         } else {
           // For custom rule.
           if (typeof validator === "function") {
-            valid = await validator.call();
+            valid = await validator.call;
+            rule = validator.name;
+          } else if (typeof validator === "object") {
+            valid = await validator.fnc();
             rule = validator.name;
           } else {
             const args = validator.split(/:/g);

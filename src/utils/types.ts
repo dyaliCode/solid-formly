@@ -24,7 +24,7 @@ export type RulesList =
   | "file"
   | "equal"
   | "url"
-  | (() => Promise<boolean>);
+  | { name: string; fnc: () => Promise<boolean> };
 
 export interface IField {
   type: "input" | "date" | "textarea" | "select" | "checkbox" | "radio" | "file";
