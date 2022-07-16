@@ -6,11 +6,11 @@
     "Kamal Sahmoud"
   ],
   "license": "MIT",
-  "version": "0.0.13",
-  "homepage": "https://github.com/dyaliCode/solid-formly#readme",
+  "version": "0.0.14",
+  "homepage": "https://www.solid-formly.com/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dyaliCode/solid-formly"
+    "url": "https://github.com/dyaliCode/solid-formly#readme"
   },
   "type": "module",
   "main": "dist/index.js",

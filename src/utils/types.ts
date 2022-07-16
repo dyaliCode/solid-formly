@@ -15,10 +15,12 @@ export interface IForm extends IFormProps {
   valid: boolean;
 }
 
+const _number: number = 0;
+
 export type RulesList =
   | "required"
-  | "min"
-  | "max"
+  | `min:${typeof _number}`
+  | `max:${typeof _number}`
   | "email"
   | "between"
   | "file"

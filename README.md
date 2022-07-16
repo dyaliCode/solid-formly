@@ -13,7 +13,7 @@
 
 ## Documentation
 
-[Link Documentation](https://solid-formly-documentation.vercel.app/)
+[Link Documentation](https://www.solid-formly.com/)
 
 ## Installation
 
@@ -52,7 +52,8 @@ const fields: IField[] = [
       type: "password",
       id: "password",
       classes: ["form-control"],
-      placeholder: "Tap your first name"
+      placeholder: "Tap your first name",
+      autocomplete: "off"
     },
     rules: ["required", "min:6", "max:10"],
     messages: {
