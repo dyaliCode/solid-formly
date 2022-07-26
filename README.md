@@ -13,7 +13,7 @@
 
 ## Documentation
 
-[Link Documentation](https://www.solid-formly.com/)
+[Link Documentation](https://solid.formly-js.com/)
 
 ## Installation
 
