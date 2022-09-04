@@ -28,9 +28,9 @@ const Message: Component<any> = props => {
   };
 
   return (
-    <div class="invalid-feedback">
-      <Show when={props.error}>{displayError(props.error)}</Show>
-    </div>
+    <Show when={props.error}>
+      <div class="invalid-feedback">{displayError(props.error)}</div>
+    </Show>
   );
 };
 

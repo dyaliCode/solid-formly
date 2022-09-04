@@ -19,7 +19,10 @@ import { isFieldDuplicated } from "../utils/helper";
 
 const Formly: Component<IFormProps> = (props: IFormProps) => {
   const propsMerged: IFormProps = mergeProps(
-    { btnSubmit: { text: "Submit", classes: [] }, btnReset: { text: "Reset", classes: [] } },
+    {
+      btnSubmit: { text: "Submit", classes: [] },
+      btnReset: { text: "Reset", classes: [] }
+    },
     props
   );
   let _form;
@@ -29,7 +32,11 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
   // Start createResource.
   const [formsServer] = createResource(
     () => {
-      return { fields: props.fields, form_name: props.form_name, onSubmit: props.onSubmit };
+      return {
+        fields: props.fields,
+        form_name: props.form_name,
+        onSubmit: props.onSubmit
+      };
     },
     async _props => {
       let _values: any = {};
@@ -116,6 +123,7 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
       });
 
       const form_exist = forms.find(form => form.form_name === props.form_name);
+      console.log("_currentForm", _currentForm);
 
       if (!form_exist) {
         setForms((forms: IForm[]) => [...forms, _currentForm]);
@@ -201,8 +209,14 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
 
   // Displach data current form.
   const dispatchDataForm = () => {
-    const form: IForm | undefined = forms.find((form: IForm) => form.form_name === props.form_name);
-    props.onSubmit(form?.values ? { values: form.values, valid: form.valid } : null);
+    // const form: IForm | undefined = forms.find((form: IForm) => form.form_name === props.form_name);
+    // props.onSubmit(form?.values ? { values: form.values, valid: form.valid } : null);
+    console.log("getCurrentForm()?.fields", getCurrentForm()?.values);
+    props.onSubmit(
+      getCurrentForm()?.values
+        ? { values: getCurrentForm()?.values, valid: getCurrentForm()?.valid }
+        : null
+    );
   };
 
   // Get current form.
@@ -222,6 +236,12 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
       >
         <form onSubmit={onSubmit} ref={_form} onReset={e => onReset(e)}>
           <Show when={getCurrentForm()}>
+            <hr />
+            <pre>
+              <code>{JSON.stringify(getCurrentForm()?.fields, null, 2)}</code>
+            </pre>
+            <hr />
+
             <For each={getCurrentForm()?.fields}>
               {(field: IField) => (
                 // Tag

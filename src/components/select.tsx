@@ -18,7 +18,7 @@ const Input: Component<IPropsField> = ({ form_name, field, changeValue }: IProps
       const selectedOptions = event.currentTarget.selectedOptions;
       for (let i = 0; i < selectedOptions.length; i++) {
         const value_item = selectedOptions[i].value;
-        values = [...values, ...value_item];
+        values = [...values, value_item];
       }
       value = values;
     } else {
