@@ -123,7 +123,6 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
       });
 
       const form_exist = forms.find(form => form.form_name === props.form_name);
-      console.log("_currentForm", _currentForm);
 
       if (!form_exist) {
         setForms((forms: IForm[]) => [...forms, _currentForm]);
@@ -147,7 +146,7 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
     // Set forms.
     setForms(
       form => form.form_name === props.form_name,
-      produce(form => {
+      produce(async form => {
         form.fields.map(async (field: IField) => {
           if (field.name === data.field_name) {
             form.values["touched"] = field.name;
@@ -173,7 +172,9 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
 
         const dirty = form.fields.find((field: IField) => {
           if (field.validation) {
-            return field.validation.dirty === true;
+            if (field.validation.drity) {
+              return field;
+            }
           }
         });
 
@@ -211,7 +212,7 @@ const Formly: Component<IFormProps> = (props: IFormProps) => {
   const dispatchDataForm = () => {
     // const form: IForm | undefined = forms.find((form: IForm) => form.form_name === props.form_name);
     // props.onSubmit(form?.values ? { values: form.values, valid: form.valid } : null);
-    console.log("getCurrentForm()?.fields", getCurrentForm()?.values);
+    console.log("getCurrentForm()?.fields", getCurrentForm());
     props.onSubmit(
       getCurrentForm()?.values
         ? { values: getCurrentForm()?.values, valid: getCurrentForm()?.valid }
